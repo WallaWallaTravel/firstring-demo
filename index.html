@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0e1110" />
+  <title>FirstRing</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0e1110; --card: #1e2422; --card2: #252c29; --line: #2e3733;
+      --text: #f3f4f1; --muted: #9aa39c; --dim: #6b746e;
+      --amber: #e8a54b; --amberdim: rgba(232,165,75,.14);
+      --green: #5dba7a; --greendim: rgba(93,186,122,.14);
+      --red: #e25a4a; --reddim: rgba(226,90,74,.14);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body { font-family: Geist, system-ui, sans-serif; background: #070908; color: var(--text); }
+    .shell { max-width: 430px; margin: 0 auto; min-height: 100%; background: var(--bg); padding-bottom: 72px; }
+    .top { padding: 18px 18px 10px; display: flex; justify-content: space-between; align-items: flex-end; }
+    .shop { font-size: 12px; color: var(--muted); }
+    h1 { font-size: 24px; letter-spacing: -0.04em; font-weight: 600; }
+    .pill { font-size: 11px; font-weight: 600; color: var(--green); background: var(--greendim); padding: 5px 9px; border-radius: 999px; }
+    .stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 0 14px 12px; }
+    .stat { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 10px; }
+    .stat b { display: block; font-size: 18px; }
+    .stat span { font-size: 11px; color: var(--muted); }
+    .sec { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); padding: 8px 18px 6px; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px; margin: 0 14px 8px; }
+    .row { display: flex; gap: 10px; }
+    .av { width: 36px; height: 36px; border-radius: 11px; background: #2c3531; display: grid; place-items: center; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+    .av.hot { background: var(--reddim); color: #f3b3ab; }
+    .av.ok { background: var(--greendim); color: #b7e3c4; }
+    .name { display: flex; justify-content: space-between; font-size: 14px; font-weight: 600; }
+    .time { color: var(--dim); font-size: 11px; font-weight: 500; }
+    .sub { color: var(--muted); font-size: 13px; margin-top: 2px; line-height: 1.35; }
+    .tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 8px; }
+    .tag { font-size: 11px; font-weight: 600; padding: 3px 7px; border-radius: 999px; }
+    .em { background: var(--reddim); color: #f0a199; }
+    .book { background: var(--greendim); color: #9ad4ad; }
+    .wait { background: var(--amberdim); color: #efc48a; }
+    .btns { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+    button, .btn { font: inherit; border: 0; cursor: pointer; font-size: 12px; font-weight: 600; padding: 8px 10px; border-radius: 10px; background: var(--card2); color: var(--text); }
+    .primary { background: var(--amber); color: #1a1206; }
+    .ghost { background: transparent; border: 1px solid var(--line); color: var(--muted); }
+    .tabbar { position: fixed; left: 50%; transform: translateX(-50%); bottom: 0; width: 100%; max-width: 430px; height: 64px; background: rgba(14,17,16,.94); border-top: 1px solid var(--line); display: grid; grid-template-columns: repeat(4, 1fr); padding-bottom: 8px; }
+    .tab { background: none; color: var(--dim); font-size: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; }
+    .tab.on { color: var(--amber); }
+    .hidden { display: none; }
+    .back { color: var(--amber); font-size: 13px; font-weight: 600; background: none; padding: 0; }
+    .thread-h { padding: 0 18px 12px; border-bottom: 1px solid var(--line); }
+    .msgs { padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+    .bub { max-width: 86%; padding: 9px 11px; border-radius: 14px; font-size: 13px; line-height: 1.4; }
+    .in { background: var(--card); border: 1px solid var(--line); align-self: flex-start; }
+    .out { background: #2a2418; border: 1px solid #3d3424; align-self: flex-end; color: #f6ead4; }
+    .who { font-size: 10px; font-weight: 600; color: var(--amber); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 3px; }
+    .sys { align-self: center; font-size: 11px; color: var(--dim); background: #141816; padding: 5px 9px; border-radius: 999px; }
+    .ownerbar { margin: 8px 14px 80px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px; }
+    .ownerbar p { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+    .rule { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; margin: 0 14px 8px; }
+    .rule label { font-size: 11px; color: var(--dim); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+    .rule .val { margin-top: 4px; font-size: 14px; }
+    .toggle { display: flex; justify-content: space-between; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 13px 14px; margin: 0 14px 8px; }
+    .sw { width: 42px; height: 24px; border-radius: 999px; background: #3a2a14; position: relative; flex-shrink: 0; }
+    .kn { position: absolute; top: 2px; left: 20px; width: 18px; height: 18px; border-radius: 50%; background: var(--amber); }
+    .toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: 80px; background: #f3f4f1; color: #111; font-size: 13px; font-weight: 600; padding: 10px 14px; border-radius: 12px; display: none; z-index: 20; }
+    .demo { margin: 8px 14px 0; width: calc(100% - 28px); }
+    .sms-prev { font-size: 12px; color: var(--muted); background: #141816; border-radius: 10px; padding: 8px 10px; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div id="view-today">
+      <div class="top"><div><div class="shop">Young’s Heating</div><h1>Today</h1></div><div class="pill">AI on</div></div>
+      <div class="stats">
+        <div class="stat"><b id="n-handled">6</b><span>Handled</span></div>
+        <div class="stat"><b id="n-booked">2</b><span>Confirmed</span></div>
+        <div class="stat"><b id="n-need">1</b><span>Needs you</span></div>
+      </div>
+      <button class="btn ghost demo" id="sim">Simulate a missed call</button>
+      <div class="sec" id="need-label">Needs you</div>
+      <div id="need-list"></div>
+      <div class="sec">Confirmed</div>
+      <div id="book-list"></div>
+      <div class="sec">Logged</div>
+      <div id="log-list"></div>
+    </div>
+    <div id="view-thread" class="hidden">
+      <div class="top"><button class="back" id="back">← Today</button><div class="pill" id="thread-pill">Needs you</div></div>
+      <div class="thread-h"><h2 id="t-name">Diane H.</h2><p id="t-meta" style="color:#9aa39c;font-size:12px;margin-top:2px">509-555-0142 · 412 S 3rd Ave</p></div>
+      <div class="msgs" id="msgs"></div>
+      <div class="ownerbar" id="ownerbar">
+        <p>Reply from your phone. Customer gets the text immediately.</p>
+        <div class="btns">
+          <button class="primary" data-act="call">1 · Call now</button>
+          <button data-act="slot">2 · Tue 2–4</button>
+          <button class="ghost" data-act="no">3 · Not us</button>
+        </div>
+        <div class="sms-prev" id="preview">Customer will get: “Bill here — calling you now.”</div>
+      </div>
+    </div>
+    <div id="view-rules" class="hidden">
+      <div class="top"><div><div class="shop">Young’s Heating</div><h1>Rules</h1></div></div>
+      <div class="toggle"><div><b>AI answers</b><span style="font-size:12px;color:#9aa39c">Missed + after hours</span></div><div class="sw"><div class="kn"></div></div></div>
+      <div class="rule"><label>Hours</label><div class="val">Mon–Fri 7:30a–5p · Sat 8–12</div></div>
+      <div class="rule"><label>Area</label><div class="val">Walla Walla, College Place, Touchet</div></div>
+      <div class="rule"><label>Never</label><div class="val">A price. An arrival time. A diagnosis.</div></div>
+      <div class="rule"><label>Fallback</label><div class="val">Bill · 509-555-0199 · after 10 min</div></div>
+    </div>
+    <div id="view-setup" class="hidden">
+      <div class="top"><div><div class="shop">FirstRing</div><h1>Setup</h1></div><div class="pill">4 minutes</div></div>
+      <div class="rule"><label>Shop</label><div class="val">Young’s Heating</div></div>
+      <div class="rule"><label>How you reply</label><div class="val">Text 1 / 2 / 3 or tap in this site</div></div>
+      <p style="color:#9aa39c;font-size:13px;padding:8px 18px 0">No calendar hookup. You confirm. They get a specific text.</p>
+    </div>
+  </div>
+  <nav class="tabbar">
+    <button class="tab on" data-view="today">Today</button>
+    <button class="tab" data-view="thread">Inbox</button>
+    <button class="tab" data-view="setup">Setup</button>
+    <button class="tab" data-view="rules">Rules</button>
+  </nav>
+  <div class="toast" id="toast"></div>
+  <script>
+    const leads = {
+      diane: { name:"Diane H.", initials:"DH", hot:true, meta:"509-555-0142 · 412 S 3rd Ave",
+        blurb:"No heat · 3rd Ave · furnace 14 yrs · wants someone today",
+        tags:[["Emergency","em"],["In area","wait"]], status:"need",
+        msgs:[["sys","Voice · 1m 42s · AI answered"],["in","Caller","Furnace is blowing cold. House is 62. Can someone come today?"],["out","FirstRing","After-hours line for Youngs. No heat at 412 S 3rd. How old is the furnace?"],["in","Caller","Maybe 14 years. Goodman."],["out","FirstRing","In area. I will not book an emergency without Bill. Texting him now."],["sys","Owner card sent · reply 1 / 2 / 3"]] },
+      mike: { name:"Mike R.", initials:"MR", hot:false, meta:"509-555-0188 · 1847 Isaacs",
+        blurb:"Tune-up · asked for this week · Isaacs", tags:[["Tune-up","book"]], status:"book",
+        msgs:[["sys","Voice · 48s"],["in","Caller","Need a furnace tune-up this week."],["out","FirstRing","I can have Bill offer a window. Address?"],["in","Caller","1847 Isaacs."],["sys","Bill tapped Tue 2-4"],["out","SMS","Tue 2-4 work for a tune-up at 1847 Isaacs? Reply YES."]] }
+    };
+    let current = "diane";
+    function el(html){ const d=document.createElement("div"); d.innerHTML=html.trim(); return d.firstChild; }
+    function renderLists(){
+      const need=Object.entries(leads).filter(([,l])=>l.status==="need");
+      const book=Object.entries(leads).filter(([,l])=>l.status==="book");
+      const log=Object.entries(leads).filter(([,l])=>l.status==="log");
+      document.getElementById("n-need").textContent=need.length;
+      document.getElementById("n-booked").textContent=book.length;
+      document.getElementById("n-handled").textContent=Object.keys(leads).length;
+      document.getElementById("need-label").style.display=need.length?"block":"none";
+      document.getElementById("need-list").innerHTML="";
+      document.getElementById("book-list").innerHTML="";
+      document.getElementById("log-list").innerHTML="";
+      need.forEach(([id,l])=>document.getElementById("need-list").appendChild(card(id,l)));
+      book.forEach(([id,l])=>document.getElementById("book-list").appendChild(card(id,l)));
+      log.forEach(([id,l])=>document.getElementById("log-list").appendChild(card(id,l)));
+    }
+    function card(id,l){
+      const tags=l.tags.map(([t,c])=>`<span class="tag ${c}">${t}</span>`).join("");
+      const node=el(`<div class="card"><div class="row"><div class="av ${l.hot?"hot":"ok"}">${l.initials}</div><div style="flex:1"><div class="name">${l.name}<span class="time">now</span></div><div class="sub">${l.blurb}</div><div class="tags">${tags}</div></div></div></div>`);
+      node.onclick=()=>openThread(id); return node;
+    }
+    function openThread(id){
+      current=id; const l=leads[id];
+      document.getElementById("t-name").textContent=l.name;
+      document.getElementById("t-meta").textContent=l.meta;
+      document.getElementById("thread-pill").textContent=l.status==="need"?"Needs you":l.status==="book"?"Confirmed":"Done";
+      const box=document.getElementById("msgs"); box.innerHTML="";
+      l.msgs.forEach(([k,a,b])=>{
+        if(k==="sys") box.appendChild(el(`<div class="sys">${a}</div>`));
+        else box.appendChild(el(`<div class="bub ${k}"><div class="who">${a}</div>${b}</div>`));
+      });
+      document.getElementById("ownerbar").style.display=l.status==="need"?"block":"none";
+      show("thread");
+    }
+    function show(name){
+      ["today","thread","rules","setup"].forEach(v=>document.getElementById("view-"+v).classList.toggle("hidden", v!==name));
+      document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on", t.dataset.view===name || (name==="thread" && t.dataset.view==="thread")));
+    }
+    function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.style.display="block"; setTimeout(()=>t.style.display="none",2200); }
+    document.getElementById("back").onclick=()=>show("today");
+    document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{ if(t.dataset.view==="thread") openThread(current); else show(t.dataset.view); });
+    document.getElementById("ownerbar").addEventListener("click", e=>{
+      const act=e.target.dataset.act; if(!act) return; const l=leads[current];
+      if(act==="call"){ l.msgs.push(["out","You","Bill here — calling you now."]); l.status="log"; l.hot=false; l.tags=[["Called","wait"]]; l.blurb="You called."; toast("Text sent. Call her."); }
+      else if(act==="slot"){ l.msgs.push(["out","You","Tue 2-4 work for a visit at 412 S 3rd? Reply YES."]); l.status="book"; l.hot=false; l.tags=[["Offered Tue 2-4","book"]]; l.blurb="Offered Tue 2-4"; toast("Offer texted."); }
+      else { l.msgs.push(["out","You","We are not able to take this one."]); l.status="log"; l.hot=false; l.tags=[["Declined","wait"]]; l.blurb="Not us."; toast("Decline sent."); }
+      renderLists(); openThread(current);
+    });
+    document.getElementById("sim").onclick=()=>{
+      leads.ray={ name:"Ray C.", initials:"RC", hot:true, meta:"509-555-0160 · College Place",
+        blurb:"Water heater leaking · wants today", tags:[["Emergency","em"]], status:"need",
+        msgs:[["sys","Missed call · SMS follow-up"],["in","Caller","Water heater is leaking in the garage."],["out","FirstRing","Got it. Texting Bill now. If you do not hear in 10 minutes: 509-555-0199."],["sys","Owner card sent"]] };
+      current="ray"; renderLists(); openThread("ray"); toast("New missed call captured.");
+    };
+    renderLists();
+  </script>
+</body>
+</html>
